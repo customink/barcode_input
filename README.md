@@ -1,4 +1,3 @@
-barcode_input
-=============
+# Barcode Input
 
-A Javascript handler for barcode scanner input
+A Javascript handler for barcode scanner input.
