@@ -12,9 +12,8 @@ addScript = (path) ->
   document.head.appendChild s
 
 
-addScript './lib/barcode_input.js'
+addScript './lib/jquery.barcode_input.js'
 # addScript('./vendor/debounce')
-
 
 describe 'Barcode Input', ->
   it 'should load', -> expect( window.BC ).toBeTruthy()
