@@ -25,7 +25,7 @@ module.exports = function(grunt) {
     },
     jasmine: {
       files: [ 'spec' ],
-      options: [ 'coffee' ]
+      options: [ 'coffee', 'verbose' ]
     },
     lint: {
       files: ['grunt.js', 'lib/**/*.js']
@@ -64,11 +64,12 @@ module.exports = function(grunt) {
     grunt.helper( 'jasmine-node', {
       args : [
         'node_modules/jasmine-node/bin/jasmine-node',
-        cfg.files.join(''),
+        cfg.files.join('')
+      ].concat(
         cfg.options.map(function(i) {
           return '--' + i;
-        }).join(' ')
-      ],
+        })
+      ),
       done : function(err) {
         done( err ? false : null );
       }
