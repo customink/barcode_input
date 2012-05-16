@@ -20,6 +20,7 @@ press_key = (key, options = {} ) ->
   ret = document.createEvent('Event')
 
   keyCode = key.charCodeAt() unless (typeof key) == 'number'
+  keyCode = 27 if key == 'esc'
 
   ret.initEvent 'keydown', true, true
   ret.keyCode  = keyCode       || 65
@@ -80,12 +81,12 @@ beforeEach ->
 
 
 describe 'Barcode Input', ->
-  afterEach -> jasmine.events.cleanUp()
+  beforeEach -> @input = '[data-barcode-input]'
+  afterEach ->  jasmine.events.cleanUp()
 
   describe 'keypresses', ->
     beforeEach ->
       @event = 'input.barcode'
-      @input = '[data-barcode-input]'
 
     describe 'triggered on the barcode input', ->
       beforeEach ->
@@ -124,8 +125,12 @@ describe 'Barcode Input', ->
 
       it 'should not detect them', -> expect( @event ).not.toHaveBeenTriggeredOn( @input )
 
-  # describe 'ESC', ->
-  #   it 'should clear the buffer', ->
+  describe 'ESC', ->
+    beforeEach ->
+      spyOnEvent @input, 'cleared.barcode'
+      press_key 'esc'
+
+    it 'should clear the buffer', -> expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( @input )
   # describe 'ENTER', ->
   #   it 'should trigger an entry event', ->
   # describe 'Number Keys', ->

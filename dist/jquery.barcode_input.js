@@ -29,6 +29,13 @@
     }
   };
 
+  var clear = function(e) {
+    if( hasCorrectFocus(e) ) {
+      notify('cleared');
+    }
+  };
+
   jwerty.key('[0-9]/[num-0-num-9]', concat);
+  jwerty.key('esc',   clear);
 
 }(window, jwerty));
