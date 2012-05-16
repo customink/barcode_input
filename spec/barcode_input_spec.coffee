@@ -101,6 +101,13 @@ describe 'Barcode Input', ->
 
       it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( @input )
 
+    describe 'triggered on the body', ->
+      beforeEach ->
+        spyOnEvent @input, @event
+        press_key '0', on:document.body
+
+      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( @input )
+
     describe 'triggered on non-barcode inputs', ->
       beforeEach ->
         spyOnEvent @input, @event
