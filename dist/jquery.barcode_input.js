@@ -35,7 +35,14 @@
     }
   };
 
+  var load = function(e) {
+    if( hasCorrectFocus(e) ) {
+      notify('entered');
+    }
+  };
+
   jwerty.key('[0-9]/[num-0-num-9]', concat);
   jwerty.key('esc',   clear);
+  jwerty.key('enter', load);
 
 }(window, jwerty));

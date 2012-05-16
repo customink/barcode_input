@@ -21,6 +21,7 @@ press_key = (key, options = {} ) ->
 
   keyCode = key.charCodeAt() unless (typeof key) == 'number'
   keyCode = 27 if key == 'esc'
+  keyCode = 13 if key == 'enter'
 
   ret.initEvent 'keydown', true, true
   ret.keyCode  = keyCode       || 65
@@ -131,8 +132,14 @@ describe 'Barcode Input', ->
       press_key 'esc'
 
     it 'should clear the buffer', -> expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( @input )
-  # describe 'ENTER', ->
-  #   it 'should trigger an entry event', ->
+
+  describe 'ENTER', ->
+    beforeEach ->
+      spyOnEvent @input, 'entered.barcode'
+      press_key 'enter'
+
+    it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( @input )
+
   # describe 'Number Keys', ->
   #   it 'should trigger an input event', ->
   # describe 'Number Pad Keys', ->
