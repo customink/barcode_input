@@ -113,21 +113,23 @@ describe 'Barcode Input', ->
 
       it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( @input )
 
-    describe 'triggered on non-barcode inputs', ->
-      beforeEach ->
-        spyOnEvent @input, @event
+    # TODO: This test cause later tests to pass when they should fail...
+    # describe 'triggered on non-barcode inputs', ->
+    #   beforeEach ->
+    #     spyOnEvent @input, @event
 
-        press_key '0', on:document.getElementById('nonInput')
+    #     press_key '0', on:document.getElementById('nonInput')
 
-      it 'should not detect them', -> expect( @event ).not.toHaveBeenTriggeredOn( @input )
+    #   it 'should not detect them', -> expect( @event ).not.toHaveBeenTriggeredOn( @input )
 
-    describe 'triggered on non-barcode textareas', ->
-      beforeEach ->
-        spyOnEvent @input, @event
+    # TODO: This test cause later tests to pass when they should fail...
+    # describe 'triggered on non-barcode textareas', ->
+    #   beforeEach ->
+    #     spyOnEvent @input, @event
 
-        press_key '0', on:document.getElementById('textarea')
+    #     press_key '0', on:document.getElementById('textarea')
 
-      it 'should not detect them', -> expect( @event ).not.toHaveBeenTriggeredOn( @input )
+    #   it 'should not detect them', -> expect( @event ).not.toHaveBeenTriggeredOn( @input )
 
   describe 'ESC', ->
     beforeEach ->
@@ -150,6 +152,7 @@ describe 'Barcode Input', ->
 
     it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( @input )
 
+  # If made to fail, this test can pass if the previous not.toHaveBeenTriggered tests are enabled...
   describe 'Number Pad Keys', ->
     beforeEach ->
       spyOnEvent @input, 'input.barcode'
