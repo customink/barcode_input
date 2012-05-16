@@ -3,8 +3,9 @@
 ##  Private ##########################
 
 # Colors
-GREEN="\033[0;32m"
 RED="\033[0;31m"
+YELLOW="\033[0;33m"
+GREEN="\033[0;32m"
 DEFAULT="\033[0m"
 
 # Fails the script
@@ -89,3 +90,28 @@ fi
 echo ""
 echo ""
 echo "== Kickstarting completed successfully! ================="
+
+if which grunt > /dev/null; then
+  : # do nothing
+else
+  echo -e $YELLOW
+  echo "  You might want to install Grunt globally."
+  echo "  It will make running tests and building the library a lot easier."
+  echo ""
+  echo "  You can do this by running the following:"
+  echo -e $DEFAULT
+  echo "      npm install -g grunt"
+  echo -e $YELLOW
+  echo "  If you choose not to globally install Grunt, then the following grunt"
+  echo "  commands should be replaced with:"
+  echo -e $DEFAULT
+  echo "      node_modules/grunt/bin/grunt"
+fi
+echo -e $YELLOW
+echo -e "  To run tests:"$DEFAULT" grunt jasmine"
+echo -e $YELLOW"  To run the build script:"$DEFAULT" grunt"
+echo -e $YELLOW
+echo "  For more information, refer to the Grunt documentation"
+echo -e $DEFAULT
+echo "      http://gruntjs.com"
+echo ""
