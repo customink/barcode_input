@@ -55,13 +55,20 @@ fi
 #################
 echo -e $GREEN"==>$DEFAULT Checking for NPM..."
 if which npm > /dev/null; then
-  echo "      Installing Dependencies... (this may take awhile)"
-  run_command "npm install"
+  : # do nothing
 else
   please_install NPM 1.1+ http://npmjs.org/doc/README.html
   fail
 fi
 
+#################
+# Dependencies
+#################
+echo -e $GREEN"==>$DEFAULT Installing dependencies... (this may take awhile)"
+echo "      Installing NPM dependencies..."
+run_command "npm install"
+echo "      Installing Git submodules..."
+run_command "git submodule update --init"
 
 #################
 # Tests - This should always be the last step!
@@ -73,6 +80,8 @@ if node_modules/grunt/bin/grunt; then
 else
   fail
 fi
+
+
 
 #################
 # All done!

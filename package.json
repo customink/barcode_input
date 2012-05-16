@@ -26,7 +26,8 @@
     }
   ],
   "dependencies": {
-    "jquery": "1.7.2"
+    "jquery" : "1.7.2",
+    "jwerty" : "0.3.1"
   },
   "devDependencies" : {
     "jasmine-node"  : "1.0.26",
