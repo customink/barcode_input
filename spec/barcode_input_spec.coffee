@@ -53,7 +53,7 @@ addScript './lib/jquery.barcode_input.js'
     spyOn: (selector, eventName) ->
       handler = (e) -> data.spiedEvents[[ $(selector), eventName]] = e
 
-      $(selector).bind eventName, handler
+      $(selector).one eventName, handler
       data.handlers.push handler
     ,
     wasTriggered: (selector, eventName) -> !!(data.spiedEvents[[selector, eventName]])
