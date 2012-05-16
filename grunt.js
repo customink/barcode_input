@@ -82,7 +82,8 @@ module.exports = function(grunt) {
       args : options.args
     }, function(err, result, code) {
       if( err ) {
-        grunt.log.error( result.stdout );
+        grunt.log.write( result.stderr );
+        grunt.log.write( result.stdout );
       } else {
         grunt.log.write( result.stdout );
       }
