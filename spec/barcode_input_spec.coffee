@@ -19,7 +19,10 @@ addScript = (path) ->
 press_key = (key, options = {} ) ->
   ret = document.createEvent('Event')
 
-  keyCode = key.charCodeAt() unless (typeof key) == 'number'
+  # Numpad keys
+  key = key.replace('num-','').charCodeAt() + 48 if /num-\d/.test(key)
+
+  keyCode = if (typeof key) == 'number' then key else key.charCodeAt()
   keyCode = 27 if key == 'esc'
   keyCode = 13 if key == 'enter'
 
@@ -140,9 +143,18 @@ describe 'Barcode Input', ->
 
     it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( @input )
 
-  # describe 'Number Keys', ->
-  #   it 'should trigger an input event', ->
-  # describe 'Number Pad Keys', ->
-  #   it 'should trigger an input event', ->
+  describe 'Number Keys', ->
+    beforeEach ->
+      spyOnEvent @input, 'input.barcode'
+      press_key '9'
+
+    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( @input )
+
+  describe 'Number Pad Keys', ->
+    beforeEach ->
+      spyOnEvent @input, 'input.barcode'
+      press_key 'num-5'
+
+    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( @input )
 
 
