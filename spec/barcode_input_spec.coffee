@@ -265,7 +265,7 @@ describe 'Barcode Input', ->
 
 
   # Simulate a manual entry by a human
-  describe 'Entering a barcode slowly', -> 
+  describe 'Entering a barcode slowly', ->
     beforeEach ->
       @counter  = 0
       @sequence = []
