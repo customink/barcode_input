@@ -170,13 +170,24 @@ describe 'Barcode Input', ->
 
 
   describe 'ENTER', ->
-    beforeEach ->
-      spyOnEvent bc_input, 'entered.barcode'
-      press_key 'enter'
+    beforeEach -> spyOnEvent bc_input, 'entered.barcode'
 
-      waits assert_delay
+    describe 'with no numbers entered', ->
+      beforeEach ->
+        press_key 'enter'
 
-    it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
+        waits assert_delay
+
+      it 'should not trigger an entry event', -> expect( 'entered.barcode' ).not.toHaveBeenTriggeredOn( bc_input )
+
+    describe 'with numbers entered', ->
+      beforeEach ->
+        press_key '1'
+        press_key 'enter'
+
+        waits assert_delay
+
+      it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
 
 

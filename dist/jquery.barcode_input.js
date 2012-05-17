@@ -52,7 +52,7 @@
   };
 
   var load = function(e) {
-    if( hasCorrectFocus(e) ) {
+    if( hasCorrectFocus(e) && buffer.length > 0 ) {
       notify('entered');
     }
   };
