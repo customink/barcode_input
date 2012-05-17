@@ -43,7 +43,7 @@ addScript './lib/jquery.barcode_input.js'
 ####
 # Event Spying form https://github.com/jandudulski/jasmine-jquery/blob/master/lib/jasmine-jquery.js
 
-( (namespace) ->
+addEventSpies = (namespace) ->
   data = {
     spiedEvents: {},
     handlers:    []
@@ -63,7 +63,7 @@ addScript './lib/jquery.barcode_input.js'
       data.handlers    = []
 
   }
-)(jasmine)
+addEventSpies(jasmine)
 
 spyOnEvent = (selector, eventName) -> jasmine.events.spyOn selector, eventName
 
