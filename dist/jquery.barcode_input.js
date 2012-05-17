@@ -27,10 +27,10 @@
   // build string
   var concat = function(e) {
     if( hasCorrectFocus(e) ) {
-      // TEST THIS
       var c,
           keyCode = e.keyCode;
 
+      // Normalize the Numpad numeric keys
       if( keyCode >= 96 && keyCode <= 105) {
         keyCode = keyCode - 48;
       }
@@ -38,7 +38,7 @@
       c = String.fromCharCode( keyCode );
 
       buffer.push( c );
-      //
+
       notify('input');
     }
   };

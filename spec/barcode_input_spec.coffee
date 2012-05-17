@@ -197,7 +197,8 @@ describe 'Barcode Input', ->
 
       waits assert_delay
 
-    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
+    it 'should trigger an input event',        -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
+    it 'should normalize Number Pad keycodes', -> expect( @code ).toEqual( '5' )
 
 
 
