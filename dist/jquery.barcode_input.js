@@ -1,12 +1,14 @@
-/*! jQuery Barcode Input - v0.1.0 - 2012-05-16
+/*! jQuery Barcode Input - v0.1.0 - 2012-05-17
 * https://github.com/dlindahl/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
 ;(function(win, jwerty) {
   // TODO: Detect jwerty and debounce
-  var debounce = win.Cowboy || win.jQuery.debounce,
-      $ = win.jQuery,
-      selector = 'input[data-barcode-input]';
+  var debounce   = win.Cowboy || win.jQuery.debounce,
+      $          = win.jQuery,
+      selector   = 'input[data-barcode-input]',
+      rate_limit = 50,
+      buffer     = [];
 
   var hasCorrectFocus = function(e) {
     var target   = e.target,
@@ -18,19 +20,33 @@
     return ( isWindow || isBody || isInput );
   };
 
-  var notify = function(eventType) {
-    $(selector).trigger( eventType + '.barcode' );
-  };
+  var notify = debounce( rate_limit, function(eventType) {
+    $(selector).trigger( eventType + '.barcode', buffer.join('') );
+  });
 
   // build string
   var concat = function(e) {
     if( hasCorrectFocus(e) ) {
+      // TEST THIS
+      var c,
+          keyCode = e.keyCode;
+
+      if( keyCode >= 96 && keyCode <= 105) {
+        keyCode = keyCode - 48;
+      }
+
+      c = String.fromCharCode( keyCode );
+
+      buffer.push( c );
+      //
       notify('input');
     }
   };
 
   var clear = function(e) {
     if( hasCorrectFocus(e) ) {
+      buffer = [];
+
       notify('cleared');
     }
   };
