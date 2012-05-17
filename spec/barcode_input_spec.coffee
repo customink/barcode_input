@@ -148,12 +148,20 @@ describe 'Barcode Input', ->
 
   describe 'ESC', ->
     beforeEach ->
+      @data = ''
+      $(bc_input).on 'cleared.barcode', (e, data) => @data = data
+
       spyOnEvent bc_input, 'cleared.barcode'
+
+      press_key '1'
       press_key 'esc'
 
       waits assert_delay
 
-    it 'should clear the buffer', -> expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
+    it 'should clear the buffer', ->
+      expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
+      expect( @data ).toEqual('')
+
 
 
 
