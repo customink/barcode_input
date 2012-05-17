@@ -13,7 +13,7 @@ addEventSpies = (namespace) ->
 
   namespace.events = {
     spyOn: (selector, eventName) ->
-      handler = (e) -> data.spiedEvents[[ $(selector), eventName]] = e
+      handler = (args...) -> data.spiedEvents[[ $(selector), eventName]] = args
 
       $(selector).one eventName, handler
       data.handlers.push handler
@@ -169,4 +169,33 @@ describe 'Barcode Input', ->
 
     it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
+
+
+
+  # Simulate a manual entry by a human
+  describe 'Entering a barcode slowly', -> 
+    beforeEach ->
+      @counter = 0
+      @data    = []
+      @handler = (e, data) =>
+        @counter = @counter + 1
+        @data.push data
+
+      $(bc_input).on 'input.barcode', @handler
+
+      spyOnEvent bc_input, 'input.barcode'
+
+      press_key '1'
+      waits 100
+      press_key '2'
+      waits 100
+      press_key '3'
+      waits 100
+
+    it 'should trigger multiple input events', ->
+      expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
+      expect( @counter ).toEqual(3)
+
+    it 'should concat the inputs as they are entered', ->
+      expect( @data ).toEqual([ '1','12','123' ])
 
