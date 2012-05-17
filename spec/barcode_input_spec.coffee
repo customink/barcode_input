@@ -200,6 +200,22 @@ describe 'Barcode Input', ->
 
       it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
+    describe 'with two sets of numbers entered', ->
+      beforeEach ->
+        press_key '1'
+        press_key 'enter'
+
+        waits assert_delay
+
+        runs ->
+          press_key '2'
+          press_key 'enter'
+
+        waits assert_delay
+
+      it 'should clear its buffer between sets', -> expect( @code ).toEqual( '2' )
+
+
 
 
   describe 'Number Keys', ->

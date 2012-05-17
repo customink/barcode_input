@@ -20,8 +20,8 @@
     return ( isWindow || isBody || isInput );
   };
 
-  var notify = debounce( rate_limit, function(eventType) {
-    $(selector).trigger( eventType + '.barcode', buffer.join('') );
+  var notify = debounce( rate_limit, function(eventType, code) {
+    $(selector).trigger( eventType + '.barcode', code );
   });
 
   // build string
@@ -39,21 +39,27 @@
 
       buffer.push( c );
 
-      notify('input');
+      notify('input', buffer.join(''));
     }
+  };
+
+  var reset = function() {
+    buffer = [];
   };
 
   var clear = function(e) {
     if( hasCorrectFocus(e) && buffer.length > 0 ) {
-      buffer = [];
+      reset();
 
-      notify('cleared');
+      notify('cleared', buffer.join(''));
     }
   };
 
   var load = function(e) {
     if( hasCorrectFocus(e) && buffer.length > 0 ) {
-      notify('entered');
+      notify('entered', buffer.join(''));
+
+      reset();
     }
   };
 
