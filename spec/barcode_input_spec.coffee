@@ -89,7 +89,7 @@ bc_input = '#input'
 describe 'Barcode Input', ->
   beforeEach -> reload_browser() and jasmine.events.cleanUp()
 
-  describe 'keypresses', ->
+  describe 'Keypresses', ->
     beforeEach ->
       @event = 'input.barcode'
 
