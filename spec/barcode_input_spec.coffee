@@ -86,17 +86,25 @@ reload_browser = ->
 # Selector used to find the element we want to listen to.
 bc_input = '#input'
 
+# Events are debounced, so there should be a delay before asserting
+assert_delay = 51
+
+
+
+
+
 describe 'Barcode Input', ->
   beforeEach -> reload_browser() and jasmine.events.cleanUp()
 
   describe 'Keypresses', ->
-    beforeEach ->
-      @event = 'input.barcode'
+    beforeEach -> @event = 'input.barcode'
 
     describe 'triggered on the barcode input', ->
       beforeEach ->
         spyOnEvent bc_input, @event
         press_key '0', on:document.getElementById( bc_input )
+
+        waits assert_delay
 
       it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
         
@@ -105,12 +113,16 @@ describe 'Barcode Input', ->
         spyOnEvent bc_input, @event
         press_key '0'
 
+        waits assert_delay
+
       it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
 
     describe 'triggered on the body', ->
       beforeEach ->
         spyOnEvent bc_input, @event
         press_key '0', on:document.body
+
+        waits assert_delay
 
       it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
 
@@ -139,6 +151,8 @@ describe 'Barcode Input', ->
       spyOnEvent bc_input, 'cleared.barcode'
       press_key 'esc'
 
+      waits assert_delay
+
     it 'should clear the buffer', -> expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
 
@@ -148,6 +162,8 @@ describe 'Barcode Input', ->
       spyOnEvent bc_input, 'entered.barcode'
       press_key 'enter'
 
+      waits assert_delay
+
     it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
 
@@ -156,6 +172,8 @@ describe 'Barcode Input', ->
     beforeEach ->
       spyOnEvent bc_input, 'input.barcode'
       press_key '9'
+
+      waits assert_delay
 
     it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
@@ -167,8 +185,37 @@ describe 'Barcode Input', ->
       spyOnEvent bc_input, 'input.barcode'
       press_key 'num-5'
 
+      waits assert_delay
+
     it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
+
+
+  # Simulate entry by Barcode Scanner
+  describe 'Entering a barcode rapidly', ->
+    beforeEach ->
+      @counter = 0
+      @data    = ''
+      @handler = (e, data) =>
+        @counter = @counter + 1
+        @data = data
+
+      $(bc_input).on 'input.barcode', @handler
+
+      spyOnEvent bc_input, 'input.barcode'
+
+      press_key '1'
+      press_key '2'
+      press_key '3'
+
+      waits assert_delay
+
+    it 'should trigger a single input event', ->
+      expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
+      expect( @counter ).toEqual( 1 )
+
+    it 'should concat the inputs', ->
+      expect( @data ).toEqual( '123' )
 
 
 
@@ -186,11 +233,11 @@ describe 'Barcode Input', ->
       spyOnEvent bc_input, 'input.barcode'
 
       press_key '1'
-      waits 100
-      press_key '2'
-      waits 100
-      press_key '3'
-      waits 100
+      waits assert_delay
+      runs -> press_key '2'
+      waits assert_delay
+      runs -> press_key '3'
+      waits assert_delay
 
     it 'should trigger multiple input events', ->
       expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
