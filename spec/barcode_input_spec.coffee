@@ -98,7 +98,8 @@ describe 'Barcode Input', ->
     reload_browser() and jasmine.events.cleanUp()
 
     @code = ''
-    $(bc_input).on 'input.barcode', (e, code) => @code = code
+    @handler = (e, code) => @code = code
+    $(bc_input).on 'input.barcode':@handler, 'entered.barcode':@handler
 
 
   describe 'Keypresses', ->
