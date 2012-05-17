@@ -154,17 +154,27 @@ describe 'Barcode Input', ->
 
 
   describe 'ESC', ->
-    beforeEach ->
-      spyOnEvent bc_input, 'cleared.barcode'
+    beforeEach -> spyOnEvent bc_input, 'cleared.barcode'
 
-      press_key '1'
-      press_key 'esc'
+    describe 'with no numbers entered', ->
+      beforeEach ->
+        press_key 'esc'
 
-      waits assert_delay
+        waits assert_delay
 
-    it 'should clear the buffer', ->
-      expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
-      expect( @code ).toEqual('')
+      it 'should not fire an event', ->
+        expect( 'cleared.barcode' ).not.toHaveBeenTriggeredOn( bc_input )
+
+    describe 'with numbers entered', ->
+      beforeEach ->
+        press_key '1'
+        press_key 'esc'
+
+        waits assert_delay
+
+      it 'should clear the buffer', ->
+        expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
+        expect( @code ).toEqual('')
 
 
 
