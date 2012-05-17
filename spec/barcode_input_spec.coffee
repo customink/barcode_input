@@ -94,7 +94,12 @@ assert_delay = 51
 
 
 describe 'Barcode Input', ->
-  beforeEach -> reload_browser() and jasmine.events.cleanUp()
+  beforeEach ->
+    reload_browser() and jasmine.events.cleanUp()
+
+    @code = ''
+    $(bc_input).on 'input.barcode', (e, code) => @code = code
+
 
   describe 'Keypresses', ->
     beforeEach -> @event = 'input.barcode'
@@ -148,9 +153,6 @@ describe 'Barcode Input', ->
 
   describe 'ESC', ->
     beforeEach ->
-      @data = ''
-      $(bc_input).on 'cleared.barcode', (e, data) => @data = data
-
       spyOnEvent bc_input, 'cleared.barcode'
 
       press_key '1'
@@ -160,7 +162,7 @@ describe 'Barcode Input', ->
 
     it 'should clear the buffer', ->
       expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
-      expect( @data ).toEqual('')
+      expect( @code ).toEqual('')
 
 
 
@@ -203,12 +205,7 @@ describe 'Barcode Input', ->
   describe 'Entering a barcode rapidly', ->
     beforeEach ->
       @counter = 0
-      @data    = ''
-      @handler = (e, data) =>
-        @counter = @counter + 1
-        @data = data
-
-      $(bc_input).on 'input.barcode', @handler
+      $(bc_input).on 'input.barcode', => @counter = @counter + 1
 
       spyOnEvent bc_input, 'input.barcode'
 
@@ -223,18 +220,18 @@ describe 'Barcode Input', ->
       expect( @counter ).toEqual( 1 )
 
     it 'should concat the inputs', ->
-      expect( @data ).toEqual( '123' )
+      expect( @code ).toEqual( '123' )
 
 
 
   # Simulate a manual entry by a human
   describe 'Entering a barcode slowly', -> 
     beforeEach ->
-      @counter = 0
-      @data    = []
-      @handler = (e, data) =>
+      @counter  = 0
+      @sequence = []
+      @handler  = (e, code) =>
         @counter = @counter + 1
-        @data.push data
+        @sequence.push code
 
       $(bc_input).on 'input.barcode', @handler
 
@@ -252,5 +249,5 @@ describe 'Barcode Input', ->
       expect( @counter ).toEqual(3)
 
     it 'should concat the inputs as they are entered', ->
-      expect( @data ).toEqual([ '1','12','123' ])
+      expect( @sequence ).toEqual([ '1','12','123' ])
 
