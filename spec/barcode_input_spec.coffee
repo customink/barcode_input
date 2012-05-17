@@ -1,44 +1,6 @@
-fs       = require('fs')
-jsdom    = require('jsdom')
-html     = fs.readFileSync('./spec/fixtures/browser.html').toString()
-document = jsdom.jsdom(html)
-window   = document.createWindow()
-$        = require('jQuery').create(window)
-
-# Provide JSDom with access to the console.
-window.console = console
-
-# Adds a SCRIPT tag to the document fixture
-addScript = (path) ->
-  data   = fs.readFileSync(path).toString()
-  txt    = document.createTextNode data
-  script = document.createElement 'script'
-  script.appendChild txt
-  document.head.appendChild script
-
-press_key = (key, options = {} ) ->
-  ret = document.createEvent('Event')
-
-  # Numpad keys
-  key = key.replace('num-','').charCodeAt() + 48 if /num-\d/.test(key)
-
-  keyCode = if (typeof key) == 'number' then key else key.charCodeAt()
-  keyCode = 27 if key == 'esc'
-  keyCode = 13 if key == 'enter'
-
-  ret.initEvent 'keydown', true, true
-  ret.keyCode  = keyCode       || 65
-  ret.shiftKey = options.shift || false
-  ret.ctrlKey  = options.ctrl  || false
-  ret.altKey   = options.alt   || false
-  ret.metaKey  = options.meta  || false
-  dom          = options.on    || document
-
-  dom.dispatchEvent( ret )
-
-addScript './node_modules/jwerty/jwerty.js'
-addScript './vendor/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js'
-addScript './lib/jquery.barcode_input.js'
+fs        = require('fs')
+jsdom     = require('jsdom')
+jQueryLib = require('jQuery')
 
 ####
 # Event Spying form https://github.com/jandudulski/jasmine-jquery/blob/master/lib/jasmine-jquery.js
@@ -77,16 +39,55 @@ beforeEach ->
         ]
       jasmine.events.wasTriggered( $(selector), @actual )
   })
-
-
-
-
 ####
 
+# Adds a SCRIPT tag to the document fixture
+addScript = (document, path) ->
+  data   = fs.readFileSync(path).toString()
+  txt    = document.createTextNode data
+  script = document.createElement 'script'
+  script.appendChild txt
+  document.head.appendChild script
+
+press_key = (key, options = {} ) ->
+  ret = document.createEvent('Event')
+
+  # Numpad keys
+  key = key.replace('num-','').charCodeAt() + 48 if /num-\d/.test(key)
+
+  keyCode = if (typeof key) == 'number' then key else key.charCodeAt()
+  keyCode = 27 if key == 'esc'
+  keyCode = 13 if key == 'enter'
+
+  ret.initEvent 'keydown', true, true
+  ret.keyCode  = keyCode       || 65
+  ret.shiftKey = options.shift || false
+  ret.ctrlKey  = options.ctrl  || false
+  ret.altKey   = options.alt   || false
+  ret.metaKey  = options.meta  || false
+  dom          = options.on    || document
+
+  dom.dispatchEvent( ret )
+
+html     = fs.readFileSync('./spec/fixtures/browser.html').toString()
+window   = document = $ = null
+reload_browser = ->
+  document  = jsdom.jsdom(html)
+  window    = document.createWindow()
+  $         = jQueryLib.create(window)
+
+  # Provide JSDom with access to the console.
+  window.console = console
+
+  addScript document, './node_modules/jwerty/jwerty.js'
+  addScript document, './vendor/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js'
+  addScript document, './lib/jquery.barcode_input.js'
+
+# Selector used to find the element we want to listen to.
+bc_input = '#input'
 
 describe 'Barcode Input', ->
-  beforeEach -> @input = '[data-barcode-input]'
-  afterEach ->  jasmine.events.cleanUp()
+  beforeEach -> reload_browser() and jasmine.events.cleanUp()
 
   describe 'keypresses', ->
     beforeEach ->
@@ -94,24 +95,24 @@ describe 'Barcode Input', ->
 
     describe 'triggered on the barcode input', ->
       beforeEach ->
-        spyOnEvent @input, @event
-        press_key '0', on:document.getElementById('input')
+        spyOnEvent bc_input, @event
+        press_key '0', on:document.getElementById( bc_input )
 
-      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( @input )
+      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
         
     describe 'triggered on the document', ->
       beforeEach ->
-        spyOnEvent @input, @event
+        spyOnEvent bc_input, @event
         press_key '0'
 
-      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( @input )
+      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
 
     describe 'triggered on the body', ->
       beforeEach ->
-        spyOnEvent @input, @event
+        spyOnEvent bc_input, @event
         press_key '0', on:document.body
 
-      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( @input )
+      it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
 
     # TODO: This test cause later tests to pass when they should fail...
     # describe 'triggered on non-barcode inputs', ->
@@ -131,33 +132,41 @@ describe 'Barcode Input', ->
 
     #   it 'should not detect them', -> expect( @event ).not.toHaveBeenTriggeredOn( @input )
 
+
+
   describe 'ESC', ->
     beforeEach ->
-      spyOnEvent @input, 'cleared.barcode'
+      spyOnEvent bc_input, 'cleared.barcode'
       press_key 'esc'
 
-    it 'should clear the buffer', -> expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( @input )
+    it 'should clear the buffer', -> expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
+
+
 
   describe 'ENTER', ->
     beforeEach ->
-      spyOnEvent @input, 'entered.barcode'
+      spyOnEvent bc_input, 'entered.barcode'
       press_key 'enter'
 
-    it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( @input )
+    it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
+
+
 
   describe 'Number Keys', ->
     beforeEach ->
-      spyOnEvent @input, 'input.barcode'
+      spyOnEvent bc_input, 'input.barcode'
       press_key '9'
 
-    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( @input )
+    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
+
+
 
   # If made to fail, this test can pass if the previous not.toHaveBeenTriggered tests are enabled...
   describe 'Number Pad Keys', ->
     beforeEach ->
-      spyOnEvent @input, 'input.barcode'
+      spyOnEvent bc_input, 'input.barcode'
       press_key 'num-5'
 
-    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( @input )
+    it 'should trigger an input event', -> expect( 'input.barcode' ).toHaveBeenTriggeredOn( bc_input )
 
 
