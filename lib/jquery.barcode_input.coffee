@@ -9,11 +9,9 @@ buffer     = []
 # Don't register the keystroke for other focusable elements.
 hasCorrectFocus = (e) ->
   target   = e.target
-  isWindow = target == doc
-  isBody   = target == doc.body
-  isInput  = target.getAttribute and target.getAttribute('data-barcode-input')
-
-  isWindow or isBody or isInput
+  return true if target == doc      # Target is the Document
+  return true if target == doc.body # Target is the Document Body
+  return true if target.hasAttribute and target.hasAttribute('data-barcode-input')
 
 # Debounced notification function
 notify = debounce( rate_limit, (eventType, code) -> $(selector).trigger "#{eventType}.barcode", code )

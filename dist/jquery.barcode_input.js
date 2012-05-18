@@ -1,4 +1,4 @@
-/*! jQuery Barcode Input - v0.1.0 - 2012-05-17
+/*! jQuery Barcode Input - v0.1.1 - 2012-05-18
 * https://github.com/dlindahl/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
@@ -20,12 +20,17 @@
   buffer = [];
 
   hasCorrectFocus = function(e) {
-    var isBody, isInput, isWindow, target;
+    var target;
     target = e.target;
-    isWindow = target === doc;
-    isBody = target === doc.body;
-    isInput = target.getAttribute && target.getAttribute('data-barcode-input');
-    return isWindow || isBody || isInput;
+    if (target === doc) {
+      return true;
+    }
+    if (target === doc.body) {
+      return true;
+    }
+    if (target.hasAttribute && target.hasAttribute('data-barcode-input')) {
+      return true;
+    }
   };
 
   notify = debounce(rate_limit, function(eventType, code) {
