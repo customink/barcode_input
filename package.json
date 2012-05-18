@@ -2,7 +2,7 @@
   "name": "jquery.barcode_input",
   "title": "jQuery Barcode Input",
   "description": "An incredibly simple Javascript handler for barcode scanner input.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/dlindahl/barcode_input",
   "author": {
     "name": "Derek Lindahl",
