@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     },
     concat: {
       dist: {
-        src: ['<banner:meta.banner>', '<file_strip_banner:lib/<%= pkg.name %>.js>'],
+        src: ['<banner:meta.banner>', '<file_strip_banner:compiled/<%= pkg.name %>.js>'],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
       options: {
         curly: true,
         eqeqeq: true,
-        immed: true,
+        immed: false,
         latedef: true,
         newcap: true,
         noarg: true,
@@ -52,9 +52,19 @@ module.exports = function(grunt) {
         jQuery: true
       }
     },
-    uglify: {}
+    uglify: {},
+    coffee: {
+      app: {
+        src: [ 'lib/**/*.coffee' ],
+        dest: 'compiled',
+        options : {
+          bare : false
+        }
+      }
+    }
   });
 
+  grunt.loadNpmTasks('grunt-coffee');
 
   // Jasmine Runner
   grunt.registerTask('jasmine', 'Run Jasmine tests with NodeJS', function() {
@@ -92,8 +102,8 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerTask('test', 'coffee jasmine');
 
   // Default task.
-  grunt.registerTask('default', 'lint jasmine concat min');
-
+  grunt.registerTask('default', 'lint test concat min');
 };

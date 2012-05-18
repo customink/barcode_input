@@ -34,7 +34,8 @@
     "jsdom"         : "git://github.com/tmpvar/jsdom.git#8bbbdc2e01",
     "jQuery"        : "1.7.2",
     "coffee-script" : "1.3.3",
-    "grunt"         : "0.3.9"
+    "grunt"         : "0.3.9",
+    "grunt-coffee"  : "git://github.com/dlindahl/grunt-coffee.git"
   },
   "keywords": [
     "barcode", "scanner", "input"

@@ -81,7 +81,7 @@ reload_browser = ->
 
   addScript document, './node_modules/jwerty/jwerty.js'
   addScript document, './vendor/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js'
-  addScript document, './lib/jquery.barcode_input.js'
+  addScript document, './compiled/jquery.barcode_input.js'
 
 # Selector used to find the element we want to listen to.
 bc_input = '#input'
