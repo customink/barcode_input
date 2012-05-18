@@ -108,7 +108,7 @@ describe 'Barcode Input', ->
     describe 'triggered on the barcode input', ->
       beforeEach ->
         spyOnEvent bc_input, @event
-        press_key '0', on:document.getElementById( bc_input )
+        press_key '0', on:$(bc_input)[0]
 
         waits assert_delay
 
