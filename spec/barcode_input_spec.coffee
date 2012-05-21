@@ -56,8 +56,13 @@ press_key = (key, options = {} ) ->
   key = key.replace('num-','').charCodeAt() + 48 if /num-\d/.test(key)
 
   keyCode = if (typeof key) == 'number' then key else key.charCodeAt()
-  keyCode = 27 if key == 'esc'
-  keyCode = 13 if key == 'enter'
+  switch key
+    when 'esc'
+      keyCode = 27
+      key = ''
+    when 'enter'
+      keyCode = 13
+      key = ''
 
   ret.initEvent 'keydown', true, true
   ret.keyCode  = keyCode       || 65
@@ -68,6 +73,9 @@ press_key = (key, options = {} ) ->
   dom          = options.on    || document
 
   dom.dispatchEvent( ret )
+
+  if dom.hasAttribute and dom.hasAttribute('data-barcode-input')
+    $(dom).html( $(dom).html() + key )
 
 html     = fs.readFileSync('./spec/fixtures/browser.html').toString()
 window   = document = $ = null
@@ -193,12 +201,14 @@ describe 'Barcode Input', ->
 
     describe 'with numbers entered', ->
       beforeEach ->
-        press_key '1'
-        press_key 'enter'
+        press_key '1',      on:$(bc_input)[0]
+        press_key 'enter',  on:$(bc_input)[0]
 
         waits assert_delay
 
       it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
+
+      it 'should clear the value from the INPUT', -> expect( $(bc_input).val() ).toEqual('')
 
     describe 'with two sets of numbers entered', ->
       beforeEach ->

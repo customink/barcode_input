@@ -31,7 +31,9 @@ parse = (e) ->
     notify 'input', buffer.join('')
 
 # PRIVATE: Directly resets the buffer
-reset = -> buffer = []
+reset = ->
+  buffer = []
+  $(selector).val('')
 
 # Clears the buffer
 clear = (e) ->

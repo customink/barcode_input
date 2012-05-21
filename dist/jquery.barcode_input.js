@@ -1,4 +1,4 @@
-/*! jQuery Barcode Input - v0.1.1 - 2012-05-18
+/*! jQuery Barcode Input - v0.1.1 - 2012-05-21
 * https://github.com/dlindahl/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
@@ -51,7 +51,8 @@
   };
 
   reset = function() {
-    return buffer = [];
+    buffer = [];
+    return $(selector).val('');
   };
 
   clear = function(e) {
