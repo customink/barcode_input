@@ -64,6 +64,7 @@
 
   load = function(e) {
     if (hasCorrectFocus(e) && buffer.length > 0) {
+      e.preventDefault();
       notify('entered', buffer.join(''));
       return reset();
     }

@@ -45,6 +45,8 @@ clear = (e) ->
 # Indicates that a barcode has been entered
 load = (e) ->
   if hasCorrectFocus(e) and buffer.length > 0
+    e.preventDefault()
+
     notify 'entered', buffer.join('')
 
     reset()

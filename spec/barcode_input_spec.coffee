@@ -20,6 +20,15 @@ addEventSpies = (namespace) ->
     ,
     wasTriggered: (selector, eventName) -> !!(data.spiedEvents[[selector, eventName]])
     ,
+    wasPrevented: (selector, eventName) ->
+      spies = data.spiedEvents[[selector, eventName]]
+
+      return false unless spies and spies.length > 0
+
+      # NOTE: Not sure why jQuery's isDefaultPrevented method doesn't work
+      # here. Perhaps its a JSDom implementation detail?
+      spies[0].originalEvent._preventDefault == true or spies[0].isDefaultPrevented()
+    ,
     cleanUp: ->
       data.spiedEvents = {}
       data.handlers    = []
@@ -38,6 +47,14 @@ beforeEach ->
           "Expected event #{@actual} not to have been triggered on #{selector}"
         ]
       jasmine.events.wasTriggered( $(selector), @actual )
+
+    toHaveBeenPreventedOn: (selector) ->
+      @message = ->
+        [
+          "Expected event #{@actual} to have been prevented on #{selector}",
+          "Expected event #{@actual} not to have been prevented on #{selector}"
+        ]
+      jasmine.events.wasPrevented $(selector), @actual
   })
 ####
 
@@ -225,7 +242,14 @@ describe 'Barcode Input', ->
 
       it 'should clear its buffer between sets', -> expect( @code ).toEqual( '2' )
 
+    describe 'on an element inside a FORM', ->
+      beforeEach ->
+        spyOnEvent bc_input, 'keydown'
 
+        press_key '1'
+        press_key 'enter',  on:$(bc_input)[0]
+
+      it "should prevent the FORM's submit event", -> expect( 'keydown' ).toHaveBeenPreventedOn( bc_input )
 
 
   describe 'Number Keys', ->
