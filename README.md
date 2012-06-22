@@ -1,5 +1,7 @@
 # jQuery Barcode Input
 
+[![Build Status](https://secure.travis-ci.org/customink/barcode_input.png)](http://travis-ci.org/customink/barcode_input)
+
 An incredibly simple Javascript handler for barcode scanner input.
 
 ## Getting Started
