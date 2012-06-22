@@ -94,7 +94,7 @@ press_key = (key, options = {} ) ->
   if dom.hasAttribute and dom.hasAttribute('data-barcode-input')
     $(dom).html( $(dom).html() + key )
 
-html     = fs.readFileSync('./spec/fixtures/browser.html').toString()
+html     = fs.readFileSync('spec/fixtures/browser.html').toString()
 window   = document = $ = null
 reload_browser = ->
   document  = jsdom.jsdom(html)
@@ -104,9 +104,9 @@ reload_browser = ->
   # Provide JSDom with access to the console.
   window.console = console
 
-  addScript document, './node_modules/jwerty/jwerty.js'
-  addScript document, './vendor/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js'
-  addScript document, './compiled/jquery.barcode_input.js'
+  addScript document, 'node_modules/jwerty/jwerty.js'
+  addScript document, 'vendor/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js'
+  addScript document, 'compiled/jquery.barcode_input.js'
 
 # Selector used to find the element we want to listen to.
 bc_input = '#input'
