@@ -39,7 +39,7 @@
   },
   "keywords": [
     "barcode", "scanner", "input"
-  ]
+  ],
   "scripts" : {
     "test" : "grunt jasmine"
   }
