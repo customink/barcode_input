@@ -216,6 +216,16 @@ describe 'Barcode Input', ->
 
       it 'should not trigger an entry event', -> expect( 'entered.barcode' ).not.toHaveBeenTriggeredOn( bc_input )
 
+    describe 'with numbers entered via non-Keypress events', ->
+      beforeEach ->
+        $(bc_input).val(123) # Fake a paste action.
+
+        press_key 'enter', on:$(bc_input)[0]
+
+        waits assert_delay
+
+      it 'should trigger an entry event', -> expect( 'entered.barcode' ).toHaveBeenTriggeredOn( bc_input )
+
     describe 'with numbers entered', ->
       beforeEach ->
         press_key '1',      on:$(bc_input)[0]

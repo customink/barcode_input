@@ -44,12 +44,17 @@ clear = (e) ->
 
 # Indicates that a barcode has been entered
 load = (e) ->
-  if hasCorrectFocus(e) and buffer.length > 0
-    e.preventDefault()
+  if hasCorrectFocus(e)
+    # If there is nothing in the buffer, check for an input value.
+    # The user may have pasted it in.
+    buffer = e.target.value.split('') if buffer.length == 0
 
-    notify 'entered', buffer.join('')
+    if buffer.length > 0
+      e.preventDefault()
 
-    reset()
+      notify 'entered', buffer.join('')
+
+      reset()
 
 jwerty.key '[0-9]/[num-0-num-9]', parse
 jwerty.key 'esc',   clear
