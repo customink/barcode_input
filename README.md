@@ -33,7 +33,7 @@ generated via grunt. You'll find source code in the "lib" subdirectory!_
 
 ### Development
 
-    git clone git@github.com:dlindahl/barcode_input.git
+    git clone git@github.com:customink/barcode_input.git
     cd barcode_input
     ./bin/kickstart.sh
 
@@ -46,6 +46,6 @@ generated via grunt. You'll find source code in the "lib" subdirectory!_
 Copyright (c) 2012 Derek Lindahl
 Licensed under the MIT, GPL licenses.
 
-[min]: https://raw.github.com/dlindahl/jquery.barcode_input/master/dist/jquery.barcode_input.min.js
-[max]: https://raw.github.com/dlindahl/jquery.barcode_input/master/dist/jquery.barcode_input.js
+[min]: https://raw.github.com/customink/jquery.barcode_input/master/dist/jquery.barcode_input.min.js
+[max]: https://raw.github.com/customink/jquery.barcode_input/master/dist/jquery.barcode_input.js
 [grunt]: https://github.com/cowboy/grunt

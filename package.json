@@ -3,7 +3,7 @@
   "title": "jQuery Barcode Input",
   "description": "An incredibly simple Javascript handler for barcode scanner input.",
   "version": "0.1.2",
-  "homepage": "https://github.com/dlindahl/barcode_input",
+  "homepage": "https://github.com/customink/barcode_input",
   "author": {
     "name": "Derek Lindahl",
     "email": "dlindahl@customink.com"
