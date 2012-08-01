@@ -6,12 +6,13 @@ selector   = '[data-barcode-input]'
 rate_limit = 50
 buffer     = []
 
+isBarcodeInput = (el) -> el.hasAttribute and el.hasAttribute('data-barcode-input')
+
 # Don't register the keystroke for other focusable elements.
 hasCorrectFocus = (e) ->
-  target   = e.target
+  target = e.target
   return true if target == doc      # Target is the Document
   return true if target == doc.body # Target is the Document Body
-  return true if target.hasAttribute and target.hasAttribute('data-barcode-input')
 
 # Debounced notification function
 notify = debounce( rate_limit, (eventType, code) -> $(selector).trigger "#{eventType}.barcode", code )
@@ -37,14 +38,14 @@ reset = ->
 
 # Clears the buffer
 clear = (e) ->
-  if hasCorrectFocus(e) and buffer.length > 0
+  if ( hasCorrectFocus(e) or isBarcodeInput( e.target) ) and buffer.length > 0
     reset()
 
     notify 'cleared', buffer.join('')
 
 # Indicates that a barcode has been entered
 load = (e) ->
-  if hasCorrectFocus(e)
+  if hasCorrectFocus(e) or isBarcodeInput( e.target )
     # If there is nothing in the buffer, check for an input value.
     # The user may have pasted it in.
     buffer = e.target.value.split('') if buffer.length == 0
@@ -56,6 +57,14 @@ load = (e) ->
 
       reset()
 
+change = (e) ->
+  buffer = e.target.value.split('')
+
+  if buffer.length > 0
+    notify 'input', buffer.join('')  
+
 jwerty.key '[0-9]/[num-0-num-9]', parse
 jwerty.key 'esc',   clear
 jwerty.key 'enter', load
+
+$(document).on 'keyup', selector, change

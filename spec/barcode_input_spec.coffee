@@ -80,6 +80,9 @@ press_key = (key, options = {} ) ->
     when 'enter'
       keyCode = 13
       key = ''
+    when 'backspace'
+      keyCode = 8
+      key = ''
 
   ret.initEvent 'keydown', true, true
   ret.keyCode  = keyCode       || 65
@@ -89,10 +92,14 @@ press_key = (key, options = {} ) ->
   ret.metaKey  = options.meta  || false
   dom          = options.on    || document
 
+  if dom.hasAttribute and dom.hasAttribute('data-barcode-input')
+    if dom.tagName == 'INPUT'
+      $(dom).val( $(dom).val() + key )
+    else
+      $(dom).html( $(dom).html() + key )
+
   dom.dispatchEvent( ret )
 
-  if dom.hasAttribute and dom.hasAttribute('data-barcode-input')
-    $(dom).html( $(dom).html() + key )
 
 html     = fs.readFileSync('spec/fixtures/browser.html').toString()
 window   = document = $ = null
@@ -133,15 +140,17 @@ describe 'Barcode Input', ->
     describe 'triggered on the barcode input', ->
       beforeEach ->
         spyOnEvent bc_input, @event
+
         press_key '0', on:$(bc_input)[0]
 
         waits assert_delay
 
       it 'should detect them', -> expect( @event ).toHaveBeenTriggeredOn( bc_input )
-        
+
     describe 'triggered on the document', ->
       beforeEach ->
         spyOnEvent bc_input, @event
+
         press_key '0'
 
         waits assert_delay
@@ -151,6 +160,7 @@ describe 'Barcode Input', ->
     describe 'triggered on the body', ->
       beforeEach ->
         spyOnEvent bc_input, @event
+
         press_key '0', on:document.body
 
         waits assert_delay
@@ -202,7 +212,16 @@ describe 'Barcode Input', ->
         expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
         expect( @code ).toEqual('')
 
+    describe 'with numbers entered on the input', ->
+      beforeEach ->
+        press_key '1',   on:$(bc_input)[0]
+        press_key 'esc', on:$(bc_input)[0]
 
+        waits assert_delay
+
+      it 'should clear the buffer', ->
+        expect( 'cleared.barcode' ).toHaveBeenTriggeredOn( bc_input )
+        expect( @code ).toEqual('')
 
 
   describe 'ENTER', ->
@@ -335,3 +354,23 @@ describe 'Barcode Input', ->
     it 'should concat the inputs as they are entered', ->
       expect( @sequence ).toEqual([ '1','12','123' ])
 
+
+  describe 'Editing a barcode entry', ->
+    beforeEach ->
+      @sequence = ''
+      @handler  = (e, code) => @sequence = code
+
+      $(bc_input).on 'input.barcode', @handler
+
+      press_key '1', on:$(bc_input)[0]
+      waits assert_delay
+
+      press_key '2', on:$(bc_input)[0]
+      waits assert_delay
+
+      $(bc_input).val(1) # Simulates the editing the input value
+      press_key 'backspace', on:$(bc_input)[0]
+      waits assert_delay
+
+    it 'should reset the barcode based on the INPUTs value', ->
+      expect( @sequence ).toEqual( '1' )
