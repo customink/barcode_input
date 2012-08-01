@@ -1,4 +1,4 @@
-/*! jQuery Barcode Input - v0.1.4.alpha - 2012-08-01
+/*! jQuery Barcode Input - v0.1.4.alpha.2 - 2012-08-01
 * https://github.com/customink/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
@@ -64,13 +64,15 @@
   };
 
   load = function(e) {
+    var code;
     if (hasCorrectFocus(e) || isBarcodeInput(e.target)) {
       if (buffer.length === 0) {
         buffer = e.target.value.split('');
       }
       if (buffer.length > 0) {
         e.preventDefault();
-        notify('entered', buffer.join(''));
+        code = buffer.join('').replace(/\W/g, '');
+        notify('entered', code);
         return reset();
       }
     }

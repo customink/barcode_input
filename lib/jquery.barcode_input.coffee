@@ -53,7 +53,10 @@ load = (e) ->
     if buffer.length > 0
       e.preventDefault()
 
-      notify 'entered', buffer.join('')
+      # TODO: Add test for trimming
+      code = buffer.join('').replace( /\W/g, '' )
+
+      notify 'entered', code
 
       reset()
 
