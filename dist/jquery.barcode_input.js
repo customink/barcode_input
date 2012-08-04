@@ -1,4 +1,4 @@
-/*! jQuery Barcode Input - v0.1.4-alpha-3 - 2012-08-03
+/*! jQuery Barcode Input - v0.2.0 - 2012-08-03
 * https://github.com/customink/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
