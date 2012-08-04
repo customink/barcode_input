@@ -29,7 +29,7 @@ parse = (e) ->
 
     buffer.push char
 
-    notify 'input', buffer.join('')
+    notify 'insert', buffer.join('')
 
 # PRIVATE: Directly resets the buffer
 reset = ->
@@ -64,7 +64,7 @@ change = (e) ->
   buffer = e.target.value.split('')
 
   if buffer.length > 0
-    notify 'input', buffer.join('')  
+    notify 'insert', buffer.join('')
 
 jwerty.key '[0-9]/[num-0-num-9]', parse
 jwerty.key 'esc',   clear
