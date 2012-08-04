@@ -1,4 +1,4 @@
-/*! jQuery Barcode Input - v0.1.4.alpha.2 - 2012-08-01
+/*! jQuery Barcode Input - v0.1.4-alpha-3 - 2012-08-03
 * https://github.com/customink/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
@@ -47,7 +47,7 @@
       }
       char = String.fromCharCode(keyCode);
       buffer.push(char);
-      return notify('input', buffer.join(''));
+      return notify('insert', buffer.join(''));
     }
   };
 
@@ -57,21 +57,26 @@
   };
 
   clear = function(e) {
-    if ((hasCorrectFocus(e) || isBarcodeInput(e.target)) && buffer.length > 0) {
+    var elCanClear;
+    elCanClear = hasCorrectFocus(e) || isBarcodeInput(e.target);
+    if (buffer.length > 0 && elCanClear) {
       reset();
       return notify('cleared', buffer.join(''));
     }
   };
 
   load = function(e) {
-    var code;
+    var code, value;
     if (hasCorrectFocus(e) || isBarcodeInput(e.target)) {
       if (buffer.length === 0) {
-        buffer = e.target.value.split('');
+        value = e.target.value;
+        if (value) {
+          buffer = value.split('');
+        }
       }
       if (buffer.length > 0) {
         e.preventDefault();
-        code = buffer.join('').replace(/\W/g, '');
+        code = buffer.join('').replace(/\D/g, '');
         notify('entered', code);
         return reset();
       }
@@ -79,9 +84,12 @@
   };
 
   change = function(e) {
+    if (jwerty.is('enter/esc', e)) {
+      return;
+    }
     buffer = e.target.value.split('');
     if (buffer.length > 0) {
-      return notify('input', buffer.join(''));
+      return notify('insert', buffer.join(''));
     }
   };
 
