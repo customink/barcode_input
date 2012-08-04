@@ -23,9 +23,8 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>.min.js'
       }
     },
-    jasmine: {
-      files: [ 'spec' ],
-      options: [ 'coffee', 'verbose' ]
+    mocha: {
+      index: ['test/runner.html']
     },
     lint: {
       files: ['grunt.js', 'lib/**/*.js']
@@ -60,49 +59,28 @@ module.exports = function(grunt) {
         options : {
           bare : false
         }
+      },
+      test: {
+        src: [ 'test/*.coffee' ],
+        dest: 'test/compiled',
+        options : {
+          base : false
+        }
+      },
+      spec: {
+        src: [ 'test/spec/*.coffee' ],
+        dest: 'test/spec/compiled',
+        options : {
+          bare : false
+        }
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-coffee');
+  grunt.loadNpmTasks('grunt-mocha');
 
-  // Jasmine Runner
-  grunt.registerTask('jasmine', 'Run Jasmine tests with NodeJS', function() {
-    var cfg  = grunt.config(['jasmine']),
-        done = this.async();
-
-    grunt.helper( 'jasmine-node', {
-      args : [
-        'node_modules/jasmine-node/bin/jasmine-node',
-        cfg.files.join('')
-      ].concat(
-        cfg.options.map(function(i) {
-          return '--' + i;
-        })
-      ),
-      done : function(err) {
-        done( err ? false : null );
-      }
-    });
-  });
-
-  // Jasmine-Node
-  grunt.registerHelper('jasmine-node', function(options) {
-    return grunt.utils.spawn({
-      cmd : 'node',
-      args : options.args
-    }, function(err, result, code) {
-      if( err ) {
-        grunt.log.write( result.stderr );
-        grunt.log.write( result.stdout );
-      } else {
-        grunt.log.write( result.stdout );
-      }
-      return options.done(code);
-    });
-  });
-
-  grunt.registerTask('test', 'coffee jasmine');
+  grunt.registerTask('test', 'coffee mocha');
 
   // Default task.
   grunt.registerTask('default', 'lint test concat min');

@@ -15,7 +15,9 @@ hasCorrectFocus = (e) ->
   return true if target == doc.body # Target is the Document Body
 
 # Debounced notification function
-notify = debounce( rate_limit, (eventType, code) -> $(selector).trigger "#{eventType}.barcode", code )
+notify = debounce( rate_limit, (eventType, code) ->
+  $(selector).trigger "#{eventType}.barcode", code
+)
 
 # Parses keypresses into a barcode
 parse = (e) ->
@@ -38,7 +40,9 @@ reset = ->
 
 # Clears the buffer
 clear = (e) ->
-  if ( hasCorrectFocus(e) or isBarcodeInput( e.target) ) and buffer.length > 0
+  elCanClear = hasCorrectFocus( e ) or isBarcodeInput( e.target )
+
+  if buffer.length > 0 and elCanClear
     reset()
 
     notify 'cleared', buffer.join('')
@@ -48,19 +52,24 @@ load = (e) ->
   if hasCorrectFocus(e) or isBarcodeInput( e.target )
     # If there is nothing in the buffer, check for an input value.
     # The user may have pasted it in.
-    buffer = e.target.value.split('') if buffer.length == 0
+    if buffer.length == 0
+      value  = e.target.value
+      buffer = value.split('') if value
 
     if buffer.length > 0
       e.preventDefault()
 
       # TODO: Add test for trimming
-      code = buffer.join('').replace( /\W/g, '' )
+      code = buffer.join('').replace /\D/g, ''
 
       notify 'entered', code
 
       reset()
 
 change = (e) ->
+  # Ignore certain keys
+  return if jwerty.is('enter/esc', e)
+
   buffer = e.target.value.split('')
 
   if buffer.length > 0

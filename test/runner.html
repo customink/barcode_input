@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>Barcode Input Mocha Test</title>
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" type="text/css" charset="utf-8" />
+</head>
+<body>
+  <div id="mocha"></div>
+
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script>
+    // This will be overridden by mocha-helper if you run with grunt
+    mocha.setup('bdd');
+  </script>
+
+  <!-- Support Files -->
+  <script src="../node_modules/grunt-mocha/tasks/mocha/mocha-helper.js"></script>
+  <script src="../node_modules/jQuery/tmp/jquery.js"></script>
+  <script src="compiled/spec_helper.js"></script>
+
+  <!-- Include your assertion lib of choice -->
+  <script src="../node_modules/chai/chai.js"></script>
+  <script>
+    // Setup chai
+    var expect = chai.expect;
+  </script>
+  
+  <!-- Include anything you want to test -->
+  <textarea id="contextTmpl" style="visibility: hidden;">
+    <script src="../node_modules/jQuery/tmp/jquery.js"></script>
+    <script src="../node_modules/jwerty/jwerty.js"></script>
+    <script src="../vendor/jquery-throttle-debounce/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="../compiled/jquery.barcode_input.js"></script>
+  
+    <form>
+      <input type="text" id="input" data-barcode-input data-barcode-input-threshold="50">
+      <input type="text" id="nonInput">
+      <textarea id="textarea">&lt;/textarea>
+    </form>
+  </textarea>
+
+  <!-- Spec files -->
+  <script src="spec/compiled/loading.js"></script>
+  <script src="spec/compiled/clearing.js"></script>
+  <script src="spec/compiled/keypresses.js"></script>
+  <script src="spec/compiled/parsing.js"></script>
+  <script src="spec/compiled/entering_workflow.js"></script>
+
+  <!-- run mocha -->
+  <script>
+    mocha.run();
+  </script>
+</body>
+</html>
