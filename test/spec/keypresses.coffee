@@ -59,3 +59,40 @@ describe 'Keypresses', ->
           expect( called ).to.equal false
           done()
 
+
+
+  describe 'triggered on focusable non-input elements', ->
+    it 'should detect them', (done) ->
+      called = false
+
+      new Sandbox().ready ->
+        @$input.one 'insert.barcode', -> done()
+
+        @press_key '0', on:@window.document.getElementById 'anchor_tag'
+
+
+
+  describe 'triggered on content editable elements', ->
+    it 'should not detect them', (done) ->
+      called = false
+
+      new Sandbox().ready ->
+        @$input.one 'insert.barcode', -> called = true
+
+        editor = @window.document.getElementById 'editor'
+
+        @press_key( '0', on:editor )
+        .then ->
+          expect( called ).to.equal false
+          done()
+
+
+
+  describe 'triggered on disabled content editable elements', ->
+    it 'should detect them', (done) ->
+      called = false
+
+      new Sandbox().ready ->
+        @$input.one 'insert.barcode', -> done()
+
+        @press_key '0', on:@window.document.getElementById 'non_editor'

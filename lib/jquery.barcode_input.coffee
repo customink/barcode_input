@@ -11,8 +11,15 @@ isBarcodeInput = (el) -> el.hasAttribute and el.hasAttribute('data-barcode-input
 # Don't register the keystroke for other focusable elements.
 hasCorrectFocus = (e) ->
   target = e.target
-  return true if target == doc      # Target is the Document
-  return true if target == doc.body # Target is the Document Body
+
+  # Target is a non-Barcode Input
+  return false if $(target).is ':input'
+
+  # Target is an editable, non-input element
+  if editable = target.getAttribute? 'contenteditable'
+    return false if editable.toLowerCase() == 'true'
+
+  true
 
 # Debounced notification function
 notify = debounce( rate_limit, (eventType, code) ->

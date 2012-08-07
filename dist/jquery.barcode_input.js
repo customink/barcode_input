@@ -24,14 +24,17 @@
   };
 
   hasCorrectFocus = function(e) {
-    var target;
+    var editable, target;
     target = e.target;
-    if (target === doc) {
-      return true;
+    if ($(target).is(':input')) {
+      return false;
     }
-    if (target === doc.body) {
-      return true;
+    if (editable = typeof target.getAttribute === "function" ? target.getAttribute('contenteditable') : void 0) {
+      if (editable.toLowerCase() === 'true') {
+        return false;
+      }
     }
+    return true;
   };
 
   notify = debounce(rate_limit, function(eventType, code) {
