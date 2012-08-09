@@ -13,7 +13,7 @@ hasCorrectFocus = (e) ->
   target = e.target
 
   # Target is a non-Barcode Input
-  return false if $(target).is ':input'
+  return false if $(target).is ':input:not(button)'
 
   # Target is an editable, non-input element
   if editable = target.getAttribute? 'contenteditable'

@@ -96,3 +96,21 @@ describe 'Keypresses', ->
         @$input.one 'insert.barcode', -> done()
 
         @press_key '0', on:@window.document.getElementById 'non_editor'
+
+  describe 'triggered on button elements', ->
+    it 'should detect them', (done) ->
+      called = false
+
+      new Sandbox().ready ->
+        @$input.one 'insert.barcode', -> done()
+
+        @press_key '0', on:@window.document.getElementById 'button'
+
+  describe 'triggered on button-type input elements', ->
+    it 'should detect them', (done) ->
+      called = false
+
+      new Sandbox().ready ->
+        @$input.one 'insert.barcode', -> done()
+
+        @press_key '0', on:@window.document.getElementById 'button_inputs'
