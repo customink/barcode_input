@@ -41,7 +41,7 @@ generated via grunt. You'll find source code in the "lib" subdirectory!_
 
 ### Testing
 
-    node node_modules/jasmine-node/bin/jasmine-node spec --coffee
+    grunt test
 
 ## License
 
