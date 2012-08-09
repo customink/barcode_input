@@ -1,4 +1,4 @@
-/*! jQuery Barcode Input - v0.2.1 - 2012-08-07
+/*! jQuery Barcode Input - v0.2.2 - 2012-08-09
 * https://github.com/customink/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
@@ -26,7 +26,7 @@
   hasCorrectFocus = function(e) {
     var editable, target;
     target = e.target;
-    if ($(target).is(':input')) {
+    if ($(target).is(':input:not(button)')) {
       return false;
     }
     if (editable = typeof target.getAttribute === "function" ? target.getAttribute('contenteditable') : void 0) {
