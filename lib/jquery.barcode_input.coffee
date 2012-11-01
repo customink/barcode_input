@@ -1,10 +1,23 @@
 doc        = @document
 jwerty     = @jwerty
 $          = @jQuery
-debounce   = @Cowboy or $.debounce
 selector   = '[data-barcode-input]'
 rate_limit = 50
 buffer     = []
+
+# From http://coffeescriptcookbook.com/chapters/functions/debounce
+debounce = (func, threshold, execAsap) ->
+  timeout = null
+  (args...) ->
+    obj = this
+    delayed = ->
+      func.apply(obj, args) unless execAsap
+      timeout = null
+    if timeout
+      clearTimeout(timeout)
+    else if execAsap
+      func.apply(obj, args)
+    timeout = setTimeout delayed, threshold || 100
 
 isBarcodeInput = (el) -> el.hasAttribute and el.hasAttribute('data-barcode-input')
 
@@ -22,9 +35,9 @@ hasCorrectFocus = (e) ->
   true
 
 # Debounced notification function
-notify = debounce( rate_limit, (eventType, code) ->
+notify = debounce (eventType, code) ->
   $(selector).trigger "#{eventType}.barcode", code
-)
+, rate_limit
 
 # Parses keypresses into a barcode
 parse = (e) ->
