@@ -36,7 +36,8 @@
     "grunt-coffee"  : "0.0.2",
     "grunt-mocha"   : "0.1.2",
     "mocha"         : "1.3.2",
-    "chai"          : "1.1.1"
+    "chai"          : "1.1.1",
+    "grunt-pkg-to-component" : "1.0.0"
   },
   "keywords": [
     "barcode", "scanner", "input"
