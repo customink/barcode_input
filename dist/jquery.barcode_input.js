@@ -1,9 +1,10 @@
-/*! jQuery Barcode Input - v0.2.2 - 2012-08-09
+/*! jQuery Barcode Input - v0.3.0 - 2012-11-01
 * https://github.com/customink/barcode_input
 * Copyright (c) 2012 Derek Lindahl; Licensed MIT, GPL */
 
 (function() {
-  var $, buffer, change, clear, debounce, doc, hasCorrectFocus, isBarcodeInput, jwerty, load, notify, parse, rate_limit, reset, selector;
+  var $, buffer, change, clear, debounce, doc, hasCorrectFocus, isBarcodeInput, jwerty, load, notify, parse, rate_limit, reset, selector,
+    __slice = [].slice;
 
   doc = this.document;
 
@@ -11,13 +12,33 @@
 
   $ = this.jQuery;
 
-  debounce = this.Cowboy || $.debounce;
-
   selector = '[data-barcode-input]';
 
   rate_limit = 50;
 
   buffer = [];
+
+  debounce = function(func, threshold, execAsap) {
+    var timeout;
+    timeout = null;
+    return function() {
+      var args, delayed, obj;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      obj = this;
+      delayed = function() {
+        if (!execAsap) {
+          func.apply(obj, args);
+        }
+        return timeout = null;
+      };
+      if (timeout) {
+        clearTimeout(timeout);
+      } else if (execAsap) {
+        func.apply(obj, args);
+      }
+      return timeout = setTimeout(delayed, threshold || 100);
+    };
+  };
 
   isBarcodeInput = function(el) {
     return el.hasAttribute && el.hasAttribute('data-barcode-input');
@@ -37,9 +58,9 @@
     return true;
   };
 
-  notify = debounce(rate_limit, function(eventType, code) {
+  notify = debounce(function(eventType, code) {
     return $(selector).trigger("" + eventType + ".barcode", code);
-  });
+  }, rate_limit);
 
   parse = function(e) {
     var char, keyCode;
