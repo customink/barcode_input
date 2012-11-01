@@ -76,10 +76,7 @@ module.exports = function(grunt) {
       }
     },
     component: {
-      main: [
-        './dist/jquery.barcode_input.js',
-        './dist/jquery.barcode_input.min.js'
-      ],
+      main: './dist/jquery.barcode_input.min.js',
       dependencies: {
         jwerty: 'https://raw.github.com/keithamus/jwerty/19bac3b27848a5083b88fcf140efbcd0f7c8421f/jwerty.js'
       }
