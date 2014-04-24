@@ -2,7 +2,10 @@
   "name": "jquery.barcode_input",
   "version": "0.3.1",
   "dependencies": {
-    "jwerty": "https://raw.github.com/keithamus/jwerty/19bac3b27848a5083b88fcf140efbcd0f7c8421f/jwerty.js"
+    "jwerty": "0.3.2"
+  },
+  "devDependencies": {
+    "jquery-throttle-debounce": "bb5bd71e405cd65ec8b750e17cf99dcdcf5cc5c9"
   },
   "main": "./dist/jquery.barcode_input.min.js"
 }

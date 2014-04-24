@@ -1,3 +1,0 @@
-[submodule "vendor/jquery-throttle-debounce"]
-	path = vendor/jquery-throttle-debounce
-	url = https://github.com/cowboy/jquery-throttle-debounce.git

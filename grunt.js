@@ -1,6 +1,5 @@
 /*global module:false*/
 module.exports = function(grunt) {
-
   // Project configuration.
   grunt.initConfig({
     pkg: '<json:package.json>',
@@ -74,21 +73,14 @@ module.exports = function(grunt) {
           bare : false
         }
       }
-    },
-    component: {
-      main: './dist/jquery.barcode_input.min.js',
-      dependencies: {
-        jwerty: 'https://raw.github.com/keithamus/jwerty/19bac3b27848a5083b88fcf140efbcd0f7c8421f/jwerty.js'
-      }
     }
   });
 
   grunt.loadNpmTasks('grunt-coffee');
   grunt.loadNpmTasks('grunt-mocha');
-  grunt.loadNpmTasks('grunt-pkg-to-component');
 
   grunt.registerTask('test', 'coffee mocha');
 
   // Default task.
-  grunt.registerTask('default', 'lint test concat min component');
+  grunt.registerTask('default', 'lint test concat min');
 };
